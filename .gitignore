@@ -1,0 +1,46 @@
+# ==============================================
+# WorkBuddy Sync .gitignore
+# 同步范围：skills + identity
+# workspace memory 由 sync-workspace-memory 脚本保持同步
+# ==============================================
+
+# ---- 大型系统目录（不同步）----
+binaries/
+connectors-marketplace/
+connectors/
+extensions/
+inspiration/
+memery/
+plugins/
+skills-marketplace/
+
+# ---- 运行时文件（不同步）----
+node_modules/
+__pycache__/
+*.pyc
+*.pyo
+*.log
+*.map
+.DS_Store
+
+# ---- 配置文件（不保留）----
+argv.json
+expert-history.json
+mcp.json
+settings.json
+workspace-state.json
+
+# ---- Bootstrap 文件（一次性使用）----
+BOOTSTRAP.md
+
+# ---- 排除所有其他文件 ----
+*
+
+# ---- 只保留以下内容 ----
+!.gitignore
+!skills/
+!SOUL.md
+!IDENTITY.md
+!USER.md
+!workspace-memory/
+!sync-workspace-memory.sh
