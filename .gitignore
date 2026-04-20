@@ -43,6 +43,8 @@ BOOTSTRAP.md
 !IDENTITY.md
 !USER.md
 !workspace-memory/
+workspace-memory/*
+!workspace-memory/*.md
 !wb-sync.sh
 
 # 每台机器本地配置（不跨设备同步）
