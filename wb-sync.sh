@@ -29,17 +29,22 @@ load_config() {
     source "$CONFIG_FILE"
   fi
 
-  # 默认：查找最近的 workspace
+  # 默认：查找最近的 workspace（向上兼容多种目录结构）
   if [[ -z "$WORKSPACE_MEMORY_TARGET" ]]; then
-    local latest_dir
-    latest_dir=$(find "$HOME/WorkBuddy" -maxdepth 2 -name "memory" -type d 2>/dev/null \
-      | xargs -I{} dirname {} \
-      | xargs -I{} ls -td "{}" \
-      | head -1 2>/dev/null || echo "")
+    local wb_base
+    wb_base=$(eval echo ~ 2>/dev/null || echo "$HOME")/WorkBuddy
 
-    if [[ -n "$latest_dir" ]]; then
-      WORKSPACE_MEMORY_TARGET="$latest_dir/.workbuddy/memory"
-      log_warn "未配置 WORKSPACE_MEMORY_TARGET，自动检测到: $WORKSPACE_MEMORY_TARGET"
+    if [[ -d "$wb_base" ]]; then
+      local latest_dir
+      latest_dir=$(find "$wb_base" -maxdepth 2 -name ".workbuddy" -type d 2>/dev/null \
+        | xargs -I{} dirname {} \
+        | xargs -I{} ls -td "{}" \
+        | head -1 2>/dev/null || echo "")
+
+      if [[ -n "$latest_dir" ]]; then
+        WORKSPACE_MEMORY_TARGET="$latest_dir/.workbuddy/memory"
+        log_warn "未配置 WORKSPACE_MEMORY_TARGET，自动检测到: $WORKSPACE_MEMORY_TARGET"
+      fi
     fi
   fi
 
