@@ -27,7 +27,8 @@ async function readStdin() {
 async function main() {
   const args = process.argv.slice(2);
   const useStdin = args.includes('--stdin');
-  const filtered = args.filter((a) => a !== '--stdin');
+  const useHtml = args.includes('--html');
+  const filtered = args.filter((a) => a !== '--stdin' && a !== '--html');
 
   let to, subject, body;
   if (useStdin) {
@@ -46,12 +47,17 @@ async function main() {
   }
 
   try {
-    const info = await transporter.sendMail({
+    const mailOptions = {
       from: account,
       to,
       subject,
-      text: body,
-    });
+    };
+    if (useHtml) {
+      mailOptions.html = body;
+    } else {
+      mailOptions.text = body;
+    }
+    const info = await transporter.sendMail(mailOptions);
     console.log('已发送:', info.messageId);
   } catch (err) {
     console.error('发信失败:', err.message);
